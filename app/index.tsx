@@ -1,6 +1,7 @@
 import Logo from '@/components/Logo';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useEffect } from 'react';
 import { StatusBar, Text, View } from "react-native";
 
 const PhysicalScreen = (props: View['props']) => <View
@@ -46,9 +47,16 @@ const Header = (props: View['props']) => <View
 />
 
 export default function Index() {
+  // const db = useSQLiteContext()
+  useEffect(() => {
+    StatusBar.setTranslucent(false)
+    StatusBar.setBackgroundColor('orange')
+    StatusBar.setBarStyle('dark-content')
+  }, [])
+
   return (
     <PhysicalScreen>
-      <StatusBar translucent={false} backgroundColor='orange' barStyle='dark-content' />
+      <StatusBar />
       <Screen style={{ backgroundColor: 'black' }}>
         <Header>
           <Logo />
