@@ -1,5 +1,5 @@
 import Logo from '@/components/Logo';
-import { Text, View } from "react-native";
+import { StatusBar, Text, View } from "react-native";
 
 export default function Index() {
   return (
@@ -9,8 +9,10 @@ export default function Index() {
         backgroundColor: 'black',
         justifyContent: "center",
         alignItems: "center",
+        height: '100%',
       }}
     >
+      <StatusBar backgroundColor='black' />
       <Logo />
       <Text style={{ color: 'white' }}>Welcom!</Text>
     </View>
