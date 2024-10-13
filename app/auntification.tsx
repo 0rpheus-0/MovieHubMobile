@@ -6,7 +6,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming } from "react-native-reanimated";
 
-export default function Auntification() {
+export default function Auntification({ navigation }) {
     const nativeText = useNativeText()
     const manHeight = useSharedValue(0)
     const jumpingManStyle = useAnimatedStyle(() => ({
@@ -18,6 +18,8 @@ export default function Auntification() {
                 ), -1, true)
         }]
     }))
+
+
 
     return (
         <Screen>
@@ -39,10 +41,10 @@ export default function Auntification() {
                 <Centred style={{ gap: 20 }}>
                     <MyTextInput placeholder={nativeText.username} />
                     <MyTextInput placeholder={nativeText.password} />
-                    <MyButton onPress={() => nativeText.setLanguage(nativeText.language === 'ru' ? 'en' : 'ru')}>
+                    <MyButton onPress={() => navigation.navigate('Home')}>
                         <MyText>{nativeText.logIn}</MyText>
                     </MyButton>
-                    <MyText style={{ color: 'orange' }} onPress={() => alert("Chamber!")}>{nativeText.createAccount}</MyText>
+                    <MyText style={{ color: 'orange' }} onPress={() => navigation.navigate('Registration')}>{nativeText.createAccount}</MyText>
                 </Centred>
             </Centred>
         </Screen >

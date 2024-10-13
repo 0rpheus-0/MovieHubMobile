@@ -1,6 +1,6 @@
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 
-export const PhysicalScreen = (props: View['props']) => <Centred
+export const PhysicalScreen = (props: View['props']) => <View
     {...props}
     style={{
         flex: 1,
