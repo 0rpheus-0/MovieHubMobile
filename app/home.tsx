@@ -1,37 +1,36 @@
 
-import { Header, MyButton, MyText, MyTextInput, Screen } from '@/components/constants';
+import { Column, Header, MyButton, MyText, MyTextInput, Row, Screen } from '@/components/constants';
 import Logo from '@/components/Logo';
 import useNativeText from '@/hooks/useNativeText';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Link } from '@react-navigation/native';
-import { View } from "react-native";
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 export default function Home() {
     const nativeText = useNativeText()
     return (
         <Screen>
             <Header>
-                <Link to={'/'}>
-                    <Logo />
-                </Link>
-                <Link to={'/'}>
-                    <Fontisto name='user-secret' color='orange' size={40} />
-                </Link>
+                <Column style={{ padding: 10, width: '100%' }}>
+                    <Row style={{ width: '100%' }}>
+                        <Logo />
+                        <Row>
+                            <MaterialIcons
+                                name="language"
+                                color='orange'
+                                size={40}
+                                onPress={() => nativeText.setLanguage(nativeText.language === 'ru' ? 'en' : 'ru')} />
+                            <Fontisto name='user-secret' color='orange' size={40} />
+                        </Row>
+                    </Row>
+                    <Row style={{ width: '100%', justifyContent: 'flex-start' }} >
+                        <MyTextInput style={{ flexGrow: 1 }} placeholder={nativeText.movieName} />
+                        <MyButton style={{ width: 50 }}><MyText style={{ color: 'black' }}>+</MyText></MyButton>
+                    </Row>
+                </Column>
             </Header>
-            <View style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                position: 'absolute',
-                top: 60,
-                left: 10,
-            }}>
-                <MyTextInput placeholder={nativeText.movieName} />
-                <MyButton><MyText>fjrkmvnj</MyText></MyButton>
-            </View>
             <Ionicons name='accessibility' color='orange' />
             <MyText>{nativeText.welcom}</MyText>
-        </Screen>
+        </Screen >
     )
 }

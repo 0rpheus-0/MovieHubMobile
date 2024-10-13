@@ -2,7 +2,7 @@
 import { PhysicalScreen } from '@/components/constants';
 import { useEffect } from 'react';
 import { StatusBar } from "react-native";
-import Auntification from './auntification';
+import Registration from './registration';
 
 export default function Index() {
   // const db = useSQLiteContext()
@@ -15,7 +15,9 @@ export default function Index() {
   return (
     <PhysicalScreen>
       <StatusBar />
-      <Auntification />
+      {/* <Home /> */}
+      {/* <Auntification /> */}
+      <Registration />
     </PhysicalScreen >
   );
 }

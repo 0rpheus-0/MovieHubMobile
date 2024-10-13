@@ -33,9 +33,9 @@ export const Header = (props: View['props']) => <View
         flexDirection: 'row',
         justifyContent: 'space-between',
         position: 'absolute',
-        top: 10,
-        left: 10,
-        right: 10,
+        top: 0,
+        left: 0,
+        right: 0,
         ...props.style as {},
     }}
 />
@@ -46,6 +46,24 @@ export const Centred = (props: View['props']) => <View
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        ...props.style as {}
+    }}
+/>
+
+export const Column = (props: View['props']) => <View
+    {...props}
+    style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        ...props.style as {}
+    }}
+/>
+
+export const Row = (props: View['props']) => <Column
+    {...props}
+    style={{
+        flexDirection: 'row',
         ...props.style as {}
     }}
 />
