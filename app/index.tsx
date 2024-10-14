@@ -1,37 +1,43 @@
 
-import Auntification from '@/app/auntification';
-import Home from '@/app/home';
-import Registration from '@/app/registration';
-import { PhysicalScreen } from '@/components/constants';
-import { createStackNavigator } from '@react-navigation/stack';
-import SQLite from 'expo-sqlite';
-import React, { useEffect, useState } from 'react';
-import { StatusBar } from "react-native";
+import { Column, Header, MyButton, MyText, MyTextInput, Row, Screen } from '@/components/constants';
+import Logo from '@/components/Logo';
+import useNativeText from '@/hooks/useNativeText';
+import Fontisto from '@expo/vector-icons/Fontisto';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { Link } from 'expo-router';
 
-const Stack = createStackNavigator();
-const db = SQLite.openDatabaseAsync('mydatabase.db');
-
-export default function Index() {
-  // const db = SQLite.useSQLiteContext()
-
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    StatusBar.setTranslucent(false)
-    StatusBar.setBackgroundColor('orange')
-    StatusBar.setBarStyle('dark-content')
-  }, [])
-
-  return (
-    <PhysicalScreen>
-      <StatusBar />
-      <Stack.Navigator>
-        <Stack.Screen name="Auntification" component={Auntification} options={{ headerShown: false }} />
-        <Stack.Screen name="Registration" component={Registration} options={{ headerShown: false }} />
-        <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
-      </Stack.Navigator>
-    </PhysicalScreen >
-  );
+export default function Home() {
+    const nativeText = useNativeText()
+    return (
+        <Screen>
+            <Header>
+                <Column style={{ padding: 10, width: '100%' }}>
+                    <Row style={{ width: '100%' }}>
+                        <Logo />
+                        <Row>
+                            <MaterialIcons
+                                name="language"
+                                color='orange'
+                                size={40}
+                                onPress={() => nativeText.setLanguage(nativeText.language === 'ru' ? 'en' : 'ru')} />
+                            <Link href="/auntification" asChild>
+                                <Fontisto
+                                    name='user-secret'
+                                    color='orange'
+                                    size={40}
+                                />
+                            </Link>
+                        </Row>
+                    </Row>
+                    <Row style={{ width: '100%', justifyContent: 'flex-start' }} >
+                        <MyTextInput style={{ flexGrow: 1 }} placeholder={nativeText.movieName} />
+                        <MyButton style={{ width: 50 }}><MyText style={{ color: 'black' }}>+</MyText></MyButton>
+                    </Row>
+                </Column>
+            </Header>
+            <Ionicons name='accessibility' color='orange' />
+            <MyText>{nativeText.welcom}</MyText>
+        </Screen >
+    )
 }

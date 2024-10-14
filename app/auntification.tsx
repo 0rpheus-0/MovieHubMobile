@@ -2,11 +2,13 @@
 import { Centred, Header, MyButton, MyText, MyTextInput, Screen } from '@/components/constants';
 import Logo from '@/components/Logo';
 import useNativeText from '@/hooks/useNativeText';
+import { useUser } from '@/hooks/useUser';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { Link } from 'expo-router';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming } from "react-native-reanimated";
 
-export default function Auntification({ navigation }) {
+export default function Auntification() {
     const nativeText = useNativeText()
     const manHeight = useSharedValue(0)
     const jumpingManStyle = useAnimatedStyle(() => ({
@@ -18,8 +20,8 @@ export default function Auntification({ navigation }) {
                 ), -1, true)
         }]
     }))
-
-
+    const user = useUser('Lexa')
+    // user.
 
     return (
         <Screen>
@@ -41,10 +43,14 @@ export default function Auntification({ navigation }) {
                 <Centred style={{ gap: 20 }}>
                     <MyTextInput placeholder={nativeText.username} />
                     <MyTextInput placeholder={nativeText.password} />
-                    <MyButton onPress={() => navigation.navigate('Home')}>
-                        <MyText>{nativeText.logIn}</MyText>
-                    </MyButton>
-                    <MyText style={{ color: 'orange' }} onPress={() => navigation.navigate('Registration')}>{nativeText.createAccount}</MyText>
+                    <Link href='/' asChild>
+                        <MyButton>
+                            <MyText>{nativeText.logIn}</MyText>
+                        </MyButton>
+                    </Link>
+                    <Link href='./registration' asChild>
+                        <MyText style={{ color: 'orange' }}>{nativeText.createAccount}</MyText>
+                    </Link>
                 </Centred>
             </Centred>
         </Screen >
