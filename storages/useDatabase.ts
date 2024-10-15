@@ -2,7 +2,8 @@ import { openDatabaseAsync, SQLiteDatabase } from 'expo-sqlite'
 import { create } from 'zustand'
 
 export type Database = {
-    db?: SQLiteDatabase
+    db?: SQLiteDatabase,
+    close: () => Promise<void>
 }
 
 export namespace Schema {
@@ -17,15 +18,21 @@ export namespace Schema {
     }
 }
 
-export const useDatabase = create<Database>(() => ({}))
+export const useDatabase = create<Database>((set, get) => ({
+    close: async () => {
+        const { db } = get()
+        set({ db: undefined })
+        await db?.closeAsync()
+    }
+}))
 
 openDatabaseAsync('movie-hub-mobile').then(async db => {
     // Create tables
     await db.runAsync(/* sql */`
         CREATE TABLE IF NOT EXISTS user(
-            id INTEGER PRIMERY KEY,
-            username TEXT UNIQUE,
-            password TEXT
+            id INTEGER PRIMARY KEY,
+            username TEXT NOT NULL UNIQUE,
+            password TEXT NOT NULL
         )`)
     useDatabase.setState({ db })
 })

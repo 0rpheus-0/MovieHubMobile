@@ -15,13 +15,14 @@ export const useUsers = (): Users => {
     }
     return {
         exists: async (username: string) => (await db.getFirstAsync(
-            /* sql */`SELECT id FROM users WHERE username = ?`,
+            /* sql */`SELECT id FROM user WHERE username = ?`,
             [username])) !== null,
         register: async (username: string, password: string) => {
-            await db.runAsync(/* sql */`INSERT INTO users (username, password) VALES (?, ?)`, [username, password])
+            await db.runAsync(/* sql */`INSERT INTO user (username, password) VALUES (?, ?)`, [username, password])
         },
         login: async (username: string, password: string) => {
-            const row = await db.getFirstAsync<Schema.user>(/* sql */`SELECT id FROM users WHERE username = ?`, [username])
+            const row = await db.getFirstAsync<Schema.user>(/* sql */`SELECT * FROM user WHERE username = ?`, [username])
+            console.log(row)
             if (row === null) throw new Error(`User with name '${username}' not exists`)
             if (row.password !== password) throw new Error('Invalid password')
             return row.username

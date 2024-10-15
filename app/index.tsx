@@ -2,13 +2,18 @@
 import { Column, Header, MyButton, MyText, MyTextInput, Row, Screen } from '@/components/constants';
 import Logo from '@/components/Logo';
 import useNativeText from '@/hooks/useNativeText';
+import { useDatabase } from '@/storages/useDatabase';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Link } from 'expo-router';
+import { deleteDatabaseAsync } from 'expo-sqlite';
 
 export default function Home() {
     const nativeText = useNativeText()
+    const database = useDatabase()
+    const { db, close } = database;
+    (window as any).db = database
     return (
         <Screen>
             <Header>
@@ -36,6 +41,15 @@ export default function Home() {
                     </Row>
                 </Column>
             </Header>
+            <MyButton onPress={async () => console.log(await db?.getAllAsync('SELECT * FROM user'))}>
+                <MyText>Show users</MyText>
+            </MyButton>
+            <MyButton onPress={async () => {
+                await close()
+                console.log(await deleteDatabaseAsync('movie-hub-mobile'))
+            }}>
+                <MyText>Drop database</MyText>
+            </MyButton>
             <Ionicons name='accessibility' color='orange' />
             <MyText>{nativeText.welcom}</MyText>
         </Screen >
