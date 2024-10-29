@@ -2,6 +2,7 @@
 import { Centred, Header, MyButton, MyText, MyTextInput, Screen } from '@/components/constants';
 import Logo from '@/components/Logo';
 import useNativeText from '@/hooks/useNativeText';
+import { useSession } from '@/hooks/useSession';
 import { useUsers } from '@/hooks/useUsers';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -20,8 +21,8 @@ export default function Registration() {
                 ), -1, true)
         }]
     }))
-
-    const { exists, register } = useUsers();
+    const { login } = useSession()
+    const { registered, register } = useUsers();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
@@ -30,14 +31,13 @@ export default function Registration() {
             alert("You'r password is kall")
             return
         }
-        try {
-            if (await exists(username)) throw new Error('User already exists.')
-            await register(username, password)
-            alert(username);
-            router.replace('/');
-        } catch (error) {
-            alert('Registration failed: ' + error);
+        if (await registered(username)) {
+            alert('Опоздал. Такой пользователь уже есть')
+            return
         }
+        await register(username, password)
+        login(username)
+        router.replace('/app')
     };
     return (
         <Screen>
@@ -74,7 +74,7 @@ export default function Registration() {
                     <MyButton onPress={handleRegistation}>
                         <MyText>{nativeText.createAccount}</MyText>
                     </MyButton>
-                    <Link href='/auntification' asChild>
+                    <Link href='/login' replace>
                         <MyText style={{ color: 'orange' }}>{nativeText.logIn}</MyText>
                     </Link>
                 </Centred>

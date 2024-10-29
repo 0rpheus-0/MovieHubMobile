@@ -2,6 +2,7 @@
 import { Centred, Header, MyButton, MyText, MyTextInput, Screen } from '@/components/constants';
 import Logo from '@/components/Logo';
 import useNativeText from '@/hooks/useNativeText';
+import { useSession } from '@/hooks/useSession';
 import { useUsers } from '@/hooks/useUsers';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -9,7 +10,7 @@ import { Link, router } from 'expo-router';
 import { useState } from 'react';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming } from "react-native-reanimated";
 
-export default function Auntification() {
+export default function LoginIndex() {
     const nativeText = useNativeText()
     const manHeight = useSharedValue(0)
     const jumpingManStyle = useAnimatedStyle(() => ({
@@ -21,13 +22,18 @@ export default function Auntification() {
                 ), -1, true)
         }]
     }))
-    const { login } = useUsers();
+    const { login } = useSession()
+    const { exists } = useUsers();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const handleLogin = async () => {
         try {
-            await login(username, password)
-            router.replace('/');
+            if (!await exists(username, password)) {
+                alert('НЕ ПРАВИОЛЬНО. Попробуй. Еще. Раз.')
+                return
+            }
+            login(username)
+            router.replace('/app')
         } catch (error) {
             alert('Auntification failed: ' + error)
         }
@@ -59,11 +65,9 @@ export default function Auntification() {
                         value={password}
                         onChangeText={setPassword}
                         secureTextEntry />
-                    {/* <Link href='/' asChild> */}
                     <MyButton onPress={handleLogin}>
                         <MyText>{nativeText.logIn}</MyText>
                     </MyButton>
-                    {/* </Link> */}
                     <Link href='./registration' asChild>
                         <MyText style={{ color: 'orange' }}>{nativeText.createAccount}</MyText>
                     </Link>
