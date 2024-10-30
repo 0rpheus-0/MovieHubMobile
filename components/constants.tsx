@@ -1,3 +1,4 @@
+import { Image } from 'expo-image';
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export const PhysicalScreen = (props: View['props']) => <View
@@ -32,7 +33,6 @@ export const Header = (props: View['props']) => <View
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
@@ -101,6 +101,15 @@ export const MyTextInput = (props: TextInput['props']) => <TextInput
         padding: 5,
         borderRadius: 3,
         height: 40,
+        ...props.style as {},
+    }}
+/>
+
+export const MyImage = (props: Image['props']) => <Image
+    {...props}
+    style={{
+        width: 75,
+        height: 88,
         ...props.style as {},
     }}
 />

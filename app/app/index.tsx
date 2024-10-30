@@ -1,21 +1,80 @@
 
-import { Column, Header, MyButton, MyText, MyTextInput, Row, Screen } from '@/components/constants';
+import { Column, Header, MyButton, MyText, MyTextInput, Row } from '@/components/constants';
 import Logo from '@/components/Logo';
+import Movie from '@/components/movie';
 import useNativeText from '@/hooks/useNativeText';
 import { useDatabase } from '@/storages/useDatabase';
 import Fontisto from '@expo/vector-icons/Fontisto';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Link } from 'expo-router';
-import { deleteDatabaseAsync } from 'expo-sqlite';
+import React from 'react';
+import { View } from "react-native";
+import { SwipeListView } from "react-native-swipe-list-view";
 
 export default function AppIndex() {
     const nativeText = useNativeText()
     const database = useDatabase()
     const { db, close } = database;
     (window as any).db = database
+    const movie = [
+        {
+            id: 1,
+            name: 'Iron Man',
+            year: '2002',
+            genre: 'fantactic',
+            picture: 'https://upload.wikimedia.org/wikipedia/ru/3/30/Iron_man_filmposter.jpg'
+        },
+        {
+            id: 2,
+            name: 'Titanic',
+            year: '1020',
+            genre: 'lovestory',
+            picture: 'https://upload.wikimedia.org/wikipedia/ru/1/19/Titanic_%28Official_Film_Poster%29.png'
+        },
+        {
+            id: 3,
+            name: 'Iron Man',
+            year: '2002',
+            genre: 'fantactic',
+            picture: 'https://upload.wikimedia.org/wikipedia/ru/3/30/Iron_man_filmposter.jpg'
+        },
+        {
+            id: 4,
+            name: 'Titanic',
+            year: '1020',
+            genre: 'lovestory',
+            picture: 'https://upload.wikimedia.org/wikipedia/ru/1/19/Titanic_%28Official_Film_Poster%29.png'
+        },
+        {
+            id: 5,
+            name: 'Iron Man',
+            year: '2002',
+            genre: 'fantactic',
+            picture: 'https://upload.wikimedia.org/wikipedia/ru/3/30/Iron_man_filmposter.jpg'
+        },
+        {
+            id: 6,
+            name: 'Titanic',
+            year: '1020',
+            genre: 'lovestory',
+            picture: 'https://upload.wikimedia.org/wikipedia/ru/1/19/Titanic_%28Official_Film_Poster%29.png'
+        },
+        {
+            id: 7,
+            name: 'Iron Man',
+            year: '2002',
+            genre: 'fantactic',
+            picture: 'https://upload.wikimedia.org/wikipedia/ru/3/30/Iron_man_filmposter.jpg'
+        },
+        {
+            id: 8,
+            name: 'Titanic',
+            year: '1020',
+            genre: 'lovestory',
+            picture: 'https://upload.wikimedia.org/wikipedia/ru/1/19/Titanic_%28Official_Film_Poster%29.png'
+        },]
     return (
-        <Screen>
+        <View style={{ backgroundColor: 'black' }}>
             <Header>
                 <Column style={{ padding: 10, width: '100%' }}>
                     <Row style={{ width: '100%' }}>
@@ -41,7 +100,39 @@ export default function AppIndex() {
                     </Row>
                 </Column>
             </Header>
-            <MyButton onPress={async () => console.log(await db?.getAllAsync('SELECT * FROM user'))}>
+            {/* <Ionicons name='accessibility' color='orange' />
+            <MyText>{nativeText.welcom}</MyText> */}
+
+            <View>
+                <SwipeListView
+                    data={movie}
+                    renderItem={x =>
+                        <View style={{ marginBottom: 8 }}>
+                            <Movie.Card
+                                key={x.item.id}
+                                name={x.item.name}
+                                year={x.item.year}
+                                genre={x.item.genre}
+                                picture={x.item.picture}
+                                color='black'
+                            />
+                        </View>
+                    }
+                    renderHiddenItem={x =>
+                        <View style={{ marginBottom: 8 }}>
+                            <Movie.Back
+                                key={x.item.id}
+                                color='orange'
+                                buttonColor='red'
+                            />
+                        </View>
+                    }
+                    disableRightSwipe={true}
+                    rightOpenValue={-150}
+
+                />
+            </View>
+            {/* <MyButton onPress={async () => console.log(await db?.getAllAsync('SELECT * FROM user'))}>
                 <MyText>Show users</MyText>
             </MyButton>
             <MyButton onPress={async () => {
@@ -49,9 +140,7 @@ export default function AppIndex() {
                 console.log(await deleteDatabaseAsync('movie-hub-mobile'))
             }}>
                 <MyText>Drop database</MyText>
-            </MyButton>
-            <Ionicons name='accessibility' color='orange' />
-            <MyText>{nativeText.welcom}</MyText>
-        </Screen >
+            </MyButton> */}
+        </View >
     )
 }
