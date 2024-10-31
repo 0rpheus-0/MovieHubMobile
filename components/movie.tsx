@@ -1,8 +1,12 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
+import { useLoggedSession } from '@/hooks/useSession';
+import { useUser } from '@/hooks/useUser';
 import { Column, MyImage, MyText, Row } from "./constants";
 
 export namespace Movie {
+    const { username } = useLoggedSession()
+    const { removeMovie } = useUser(username)
     export const Card = (props: {
         name: string,
         year: string,
@@ -22,7 +26,7 @@ export namespace Movie {
             <Row style={{ width: '100%', height: 'auto', justifyContent: 'space-between' }}>
                 <MyImage source={props.picture} />
                 <Column>
-                    <MyText>{props.name}</MyText>
+                    <MyText style={{ fontSize: 25 }}>{props.name}</MyText>
                     <Row>
                         <MyText>{props.genre} </MyText>
                         <MyText>{props.year}</MyText>
@@ -32,6 +36,7 @@ export namespace Movie {
         </Column>
 
     export const Back = (props: {
+
         color: string,
         buttonColor: string
     }) =>
@@ -44,7 +49,7 @@ export namespace Movie {
 
         }}>
             <Row >
-                <MaterialIcons name="delete" size={36} />
+                <MaterialIcons name="delete" size={36} onLongPress={async () => { }} />
             </Row>
         </Row >
 

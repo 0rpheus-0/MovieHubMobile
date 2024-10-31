@@ -14,7 +14,19 @@ export namespace Schema {
     }
     export type user_movie = {
         user_id: number,
-        movie_name: string
+        movie_id: string
+    }
+    export type movie = {
+        id: string,
+        title: string,
+        years: string,
+        runtime: string,
+        genre: string,
+        director: string,
+        actors: string,
+        plot: string,
+        language: string,
+        poster: string,
     }
 }
 
@@ -33,6 +45,24 @@ openDatabaseAsync('movie-hub-mobile').then(async db => {
             id INTEGER PRIMARY KEY,
             username TEXT NOT NULL UNIQUE,
             password TEXT NOT NULL
+        )`)
+    await db.runAsync(/* sql */`
+        CREATE TABLE IF NOT EXISTS user_movie(
+            user_id REFERENCES user(id),
+            movie_id REFERENCES movie(id),
+        )`)
+    await db.runAsync(/* sql */`
+        CREATE TABLE IF NOT EXISTS movie(
+            id TEXT PRIMARY KEY,
+            title TEXT NOT NULL UNIQUE,
+            years TEXT NOT NULL,
+            runtime TEXT NOT NULL, 
+            genre TEXT NOT NULL,
+            director TEXT NOT NULL,
+            actors TEXT NOT NULL,
+            plot TEXT NOT NULL,
+            language TEXT NOT NULL,
+            poster TEXT NOT NULL
         )`)
     useDatabase.setState({ db })
 })

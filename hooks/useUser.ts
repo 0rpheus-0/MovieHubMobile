@@ -1,3 +1,4 @@
+import { RemoteMovies, SqliteChachedMovies } from "@/services/Movies"
 import { Schema, useDatabase } from "@/storages/useDatabase"
 import { useEffect, useState } from "react"
 
@@ -19,18 +20,21 @@ export const useUser = (username: string) => {
         db?.getAllAsync<Schema.user_movie>(/* sql */`
             SELECT * FROM user_movie
             WHERE user_id = ?
-        `, [id]).then(rows => setMovies(rows.map(x => x.movie_name)))
+        `, [id]).then(rows => setMovies(rows.map(x => x.movie_id)))
     }, [db, id])
     return {
         movies,
         addMovie: async (name: string) => {
+            // db.insert(movie.id)
             if (!id || !db) return
-            setMovies(prev => [...prev, name])
             try {
+                const ChachedMovies = new SqliteChachedMovies(new RemoteMovies(), db)
+                const movie = await ChachedMovies.withTitle(name)
                 await db.runAsync(/* sql */`
                     INSERT INTO user_movie(user_id, movie_name)
                     VALUES (?, ?)
                 `, [id, name])
+                setMovies(prev => [...prev, name])
             } catch (e) {
                 setMovies(prev => prev.filter(x => x !== name))
                 throw new Error(`Failed while add movie '${name}' for user '${username}' with id '${id}'`, { cause: e })

@@ -20,10 +20,17 @@ export const useUsers = (): Users => {
         registered: async (name: string) =>
             !!await db.getFirstAsync<Schema.user>('SELECT * FROM user WHERE username = ?', [name]),
         register: async (name: string, password: string) => {
-            await db.runAsync('INSERT INTO user(username, password) VALUES (?, ?)', [name, password])
+            await db.runAsync(/* sql */`
+            INSERT INTO user(username, password) 
+            VALUES (?, ?)
+            `, [name, password])
         },
         exists: async (name: string, password: string) =>
-            !!await db.getFirstAsync<Schema.user>('SELECT * FROM user WHERE username = ? AND password = ?', [name, password]),
+            !!await db.getFirstAsync<Schema.user>(/* sql */`
+            SELECT * FROM user 
+            WHERE username = ? 
+            AND password = ?
+            `, [name, password]),
     }
 }
 

@@ -3,19 +3,37 @@ import { Column, Header, MyButton, MyText, MyTextInput, Row } from '@/components
 import Logo from '@/components/Logo';
 import Movie from '@/components/movie';
 import useNativeText from '@/hooks/useNativeText';
+import { useLoggedSession } from '@/hooks/useSession';
+import { useUser } from '@/hooks/useUser';
+
 import { useDatabase } from '@/storages/useDatabase';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Link } from 'expo-router';
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
+
+
 
 export default function AppIndex() {
     const nativeText = useNativeText()
     const database = useDatabase()
     const { db, close } = database;
     (window as any).db = database
+    const { username } = useLoggedSession()
+    const { movies, addMovie, removeMovie } = useUser(username)
+    const [addMovieName, setAddMovieName] = useState('');
+    // const [movies, setMovies] = useState([])
+    // useEffect(() => {
+    //     (async () => {
+    //         const data = await (
+    //             await fetch('https://www.omdbapi.com/?apikey=71559e25&t=iron')
+    //         ).json()
+    //         const jsonObject = JSON.parse(JSON.stringify(await data.json()))
+    //         //setMovies(data)
+    //     })()
+    // }, [])
     const movie = [
         {
             id: 1,
@@ -95,15 +113,23 @@ export default function AppIndex() {
                         </Row>
                     </Row>
                     <Row style={{ width: '100%', justifyContent: 'flex-start' }} >
-                        <MyTextInput style={{ flexGrow: 1 }} placeholder={nativeText.movieName} />
-                        <MyButton style={{ width: 50 }}><MyText style={{ color: 'black' }}>+</MyText></MyButton>
+                        <MyTextInput
+                            style={{ flexGrow: 1 }}
+                            placeholder={nativeText.movieName}
+                            value={addMovieName}
+                            onChangeText={setAddMovieName} />
+                        <MyButton
+                            style={{ width: 50 }}
+                            onPress={async () => { addMovie(addMovieName) }}>
+                            <MyText style={{ color: 'black' }} >+</MyText>
+                        </MyButton>
                     </Row>
                 </Column>
             </Header>
             {/* <Ionicons name='accessibility' color='orange' />
             <MyText>{nativeText.welcom}</MyText> */}
 
-            <View>
+            <Column>
                 <SwipeListView
                     data={movie}
                     renderItem={x =>
@@ -131,16 +157,20 @@ export default function AppIndex() {
                     rightOpenValue={-150}
 
                 />
-            </View>
-            {/* <MyButton onPress={async () => console.log(await db?.getAllAsync('SELECT * FROM user'))}>
-                <MyText>Show users</MyText>
-            </MyButton>
-            <MyButton onPress={async () => {
-                await close()
-                console.log(await deleteDatabaseAsync('movie-hub-mobile'))
-            }}>
-                <MyText>Drop database</MyText>
-            </MyButton> */}
+                {/* <MyButton onPress={async () => console.log(await db?.getAllAsync('SELECT * FROM user'))}>
+                    <MyText>Show users</MyText>
+                </MyButton>
+                <MyButton onPress={async () => {
+                    await close()
+                    console.log(await deleteDatabaseAsync('movie-hub-mobile'))
+                }}>
+                    <MyText>Drop database</MyText>
+                </MyButton> */}
+            </Column>
         </View >
     )
+}
+
+function useCheckedSession(): { username: any; } {
+    throw new Error('Function not implemented.');
 }

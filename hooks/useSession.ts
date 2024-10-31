@@ -7,6 +7,7 @@ type Session = {
     logout: () => void
 }
 
+
 export const useSession = create<Session>((set) => ({
     username: getItem('username') || undefined,
     login: (name: string) => {
@@ -18,3 +19,9 @@ export const useSession = create<Session>((set) => ({
         set({ username: undefined })
     }
 }))
+
+export const useLoggedSession = () => {
+    const { username, login, logout } = useSession()
+    if (!username) throw new Error('User not loggined!')
+    return { username, login, logout }
+}
