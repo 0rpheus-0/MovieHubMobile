@@ -10,6 +10,7 @@ import { useDatabase } from '@/storages/useDatabase';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Link } from 'expo-router';
+import { deleteDatabaseAsync } from 'expo-sqlite';
 import React, { useState } from 'react';
 import { View } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
@@ -34,63 +35,63 @@ export default function AppIndex() {
     //         //setMovies(data)
     //     })()
     // }, [])
-    const movie = [
-        {
-            id: 1,
-            name: 'Iron Man',
-            year: '2002',
-            genre: 'fantactic',
-            picture: 'https://upload.wikimedia.org/wikipedia/ru/3/30/Iron_man_filmposter.jpg'
-        },
-        {
-            id: 2,
-            name: 'Titanic',
-            year: '1020',
-            genre: 'lovestory',
-            picture: 'https://upload.wikimedia.org/wikipedia/ru/1/19/Titanic_%28Official_Film_Poster%29.png'
-        },
-        {
-            id: 3,
-            name: 'Iron Man',
-            year: '2002',
-            genre: 'fantactic',
-            picture: 'https://upload.wikimedia.org/wikipedia/ru/3/30/Iron_man_filmposter.jpg'
-        },
-        {
-            id: 4,
-            name: 'Titanic',
-            year: '1020',
-            genre: 'lovestory',
-            picture: 'https://upload.wikimedia.org/wikipedia/ru/1/19/Titanic_%28Official_Film_Poster%29.png'
-        },
-        {
-            id: 5,
-            name: 'Iron Man',
-            year: '2002',
-            genre: 'fantactic',
-            picture: 'https://upload.wikimedia.org/wikipedia/ru/3/30/Iron_man_filmposter.jpg'
-        },
-        {
-            id: 6,
-            name: 'Titanic',
-            year: '1020',
-            genre: 'lovestory',
-            picture: 'https://upload.wikimedia.org/wikipedia/ru/1/19/Titanic_%28Official_Film_Poster%29.png'
-        },
-        {
-            id: 7,
-            name: 'Iron Man',
-            year: '2002',
-            genre: 'fantactic',
-            picture: 'https://upload.wikimedia.org/wikipedia/ru/3/30/Iron_man_filmposter.jpg'
-        },
-        {
-            id: 8,
-            name: 'Titanic',
-            year: '1020',
-            genre: 'lovestory',
-            picture: 'https://upload.wikimedia.org/wikipedia/ru/1/19/Titanic_%28Official_Film_Poster%29.png'
-        },]
+    // const movie = [
+    //     {
+    //         id: 1,
+    //         name: 'Iron Man',
+    //         year: '2002',
+    //         genre: 'fantactic',
+    //         picture: 'https://upload.wikimedia.org/wikipedia/ru/3/30/Iron_man_filmposter.jpg'
+    //     },
+    //     {
+    //         id: 2,
+    //         name: 'Titanic',
+    //         year: '1020',
+    //         genre: 'lovestory',
+    //         picture: 'https://upload.wikimedia.org/wikipedia/ru/1/19/Titanic_%28Official_Film_Poster%29.png'
+    //     },
+    //     {
+    //         id: 3,
+    //         name: 'Iron Man',
+    //         year: '2002',
+    //         genre: 'fantactic',
+    //         picture: 'https://upload.wikimedia.org/wikipedia/ru/3/30/Iron_man_filmposter.jpg'
+    //     },
+    //     {
+    //         id: 4,
+    //         name: 'Titanic',
+    //         year: '1020',
+    //         genre: 'lovestory',
+    //         picture: 'https://upload.wikimedia.org/wikipedia/ru/1/19/Titanic_%28Official_Film_Poster%29.png'
+    //     },
+    //     {
+    //         id: 5,
+    //         name: 'Iron Man',
+    //         year: '2002',
+    //         genre: 'fantactic',
+    //         picture: 'https://upload.wikimedia.org/wikipedia/ru/3/30/Iron_man_filmposter.jpg'
+    //     },
+    //     {
+    //         id: 6,
+    //         name: 'Titanic',
+    //         year: '1020',
+    //         genre: 'lovestory',
+    //         picture: 'https://upload.wikimedia.org/wikipedia/ru/1/19/Titanic_%28Official_Film_Poster%29.png'
+    //     },
+    //     {
+    //         id: 7,
+    //         name: 'Iron Man',
+    //         year: '2002',
+    //         genre: 'fantactic',
+    //         picture: 'https://upload.wikimedia.org/wikipedia/ru/3/30/Iron_man_filmposter.jpg'
+    //     },
+    //     {
+    //         id: 8,
+    //         name: 'Titanic',
+    //         year: '1020',
+    //         genre: 'lovestory',
+    //         picture: 'https://upload.wikimedia.org/wikipedia/ru/1/19/Titanic_%28Official_Film_Poster%29.png'
+    //     },]
     return (
         <View style={{ backgroundColor: 'black' }}>
             <Header>
@@ -120,7 +121,10 @@ export default function AppIndex() {
                             onChangeText={setAddMovieName} />
                         <MyButton
                             style={{ width: 50 }}
-                            onPress={async () => { addMovie(addMovieName) }}>
+                            onPress={async () => {
+                                console.log(addMovieName)
+                                addMovie(addMovieName)
+                            }}>
                             <MyText style={{ color: 'black' }} >+</MyText>
                         </MyButton>
                     </Row>
@@ -128,18 +132,32 @@ export default function AppIndex() {
             </Header>
             {/* <Ionicons name='accessibility' color='orange' />
             <MyText>{nativeText.welcom}</MyText> */}
-
+            <MyButton onPress={async () => console.log(await db?.getAllAsync('SELECT * FROM user'))}>
+                <MyText>Show users</MyText>
+            </MyButton>
+            <MyButton onPress={async () => console.log(await db?.getAllAsync('SELECT * FROM user_movie'))}>
+                <MyText>Show users_movie</MyText>
+            </MyButton>
+            <MyButton onPress={async () => console.log(await db?.getAllAsync('SELECT * FROM movie'))}>
+                <MyText>Show movie</MyText>
+            </MyButton>
+            <MyButton onPress={async () => {
+                await close()
+                console.log(await deleteDatabaseAsync('movie-hub-mobile'))
+            }}>
+                <MyText>Drop database</MyText>
+            </MyButton>
             <Column>
                 <SwipeListView
-                    data={movie}
+                    data={movies}
                     renderItem={x =>
                         <View style={{ marginBottom: 8 }}>
                             <Movie.Card
-                                key={x.item.id}
-                                name={x.item.name}
-                                year={x.item.year}
+                                key={x.item.title}
+                                name={x.item.title}
+                                years={x.item.years}
                                 genre={x.item.genre}
-                                picture={x.item.picture}
+                                poster={x.item.poster}
                                 color='black'
                             />
                         </View>
@@ -147,7 +165,7 @@ export default function AppIndex() {
                     renderHiddenItem={x =>
                         <View style={{ marginBottom: 8 }}>
                             <Movie.Back
-                                key={x.item.id}
+                                key={x.item.title}
                                 color='orange'
                                 buttonColor='red'
                             />
@@ -157,20 +175,12 @@ export default function AppIndex() {
                     rightOpenValue={-150}
 
                 />
-                {/* <MyButton onPress={async () => console.log(await db?.getAllAsync('SELECT * FROM user'))}>
-                    <MyText>Show users</MyText>
-                </MyButton>
-                <MyButton onPress={async () => {
-                    await close()
-                    console.log(await deleteDatabaseAsync('movie-hub-mobile'))
-                }}>
-                    <MyText>Drop database</MyText>
-                </MyButton> */}
+
             </Column>
         </View >
     )
 }
 
-function useCheckedSession(): { username: any; } {
-    throw new Error('Function not implemented.');
-}
+// function useCheckedSession(): { username: any; } {
+//     throw new Error('Function not implemented.');
+// }

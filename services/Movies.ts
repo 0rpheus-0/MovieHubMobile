@@ -18,13 +18,15 @@ export default interface Movies {
 
 export class RemoteMovies implements Movies {
     async withTitle(title: string): Promise<Movie | undefined> {
+        console.log('api')
         const data = await (
             await fetch(`https://www.omdbapi.com/?apikey=${process.env.EXPO_PUBLIC_API_KEY}&t=${title}`)
         ).json()
+        console.log(process.env.EXPO_PUBLIC_API_KEY, data)
         if (data.Response === 'False') return undefined
         return {
             title: data.Title,
-            years: data.Years,
+            years: data.Year,
             runtime: data.Runtime,
             genre: data.Genre,
             director: data.Director,
@@ -43,6 +45,7 @@ export class SqliteChachedMovies implements Movies {
         private sqlite: SQLiteDatabase
     ) { }
     async withTitle(title: string): Promise<Movie | undefined> {
+        // console.log('db')
         const chachedMovie = await this.sqlite.getFirstAsync<Movie>(/* sql */`
             SELECT * FROM movie
             WHERE title = ?
@@ -50,9 +53,20 @@ export class SqliteChachedMovies implements Movies {
         if (chachedMovie) return chachedMovie
         const movie = await this.origin.withTitle(title)
         if (!movie) return undefined
+        console.log('db2', movie.title)
+        // console.log(movie)
+        // console.log([movie.title,
+        // movie.years,
+        // movie.runtime,
+        // movie.genre,
+        // movie.director,
+        // movie.actors,
+        // movie.plot,
+        // movie.language,
+        // movie.poster])
         await this.sqlite.runAsync(/* sql */`
-        INSERT INTO movie(title, years, runtime, genre, director, actors, plot, language, poster ) 
-        VALUES (?, ?)
+            INSERT INTO movie(title, years, runtime, genre, director, actors, plot, language, poster) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         `, [movie.title,
         movie.years,
         movie.runtime,
@@ -62,6 +76,7 @@ export class SqliteChachedMovies implements Movies {
         movie.plot,
         movie.language,
         movie.poster])
+        console.log('db3')
         return movie
     }
 

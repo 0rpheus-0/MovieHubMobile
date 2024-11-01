@@ -14,7 +14,7 @@ export namespace Schema {
     }
     export type user_movie = {
         user_id: number,
-        movie_id: string
+        movie_title: string
     }
     export type movie = {
         id: string,
@@ -39,7 +39,7 @@ export const useDatabase = create<Database>((set, get) => ({
 }))
 
 openDatabaseAsync('movie-hub-mobile').then(async db => {
-    // Create tables
+
     await db.runAsync(/* sql */`
         CREATE TABLE IF NOT EXISTS user(
             id INTEGER PRIMARY KEY,
@@ -47,22 +47,23 @@ openDatabaseAsync('movie-hub-mobile').then(async db => {
             password TEXT NOT NULL
         )`)
     await db.runAsync(/* sql */`
-        CREATE TABLE IF NOT EXISTS user_movie(
-            user_id REFERENCES user(id),
-            movie_id REFERENCES movie(id),
-        )`)
+            CREATE TABLE IF NOT EXISTS movie(
+                id TEXT PRIMARY KEY,
+                title TEXT NOT NULL UNIQUE,
+                years TEXT NOT NULL,
+                runtime TEXT NOT NULL, 
+                genre TEXT NOT NULL,
+                director TEXT NOT NULL,
+                actors TEXT NOT NULL,
+                plot TEXT NOT NULL,
+                language TEXT NOT NULL,
+                poster TEXT NOT NULL
+            )`)
     await db.runAsync(/* sql */`
-        CREATE TABLE IF NOT EXISTS movie(
-            id TEXT PRIMARY KEY,
-            title TEXT NOT NULL UNIQUE,
-            years TEXT NOT NULL,
-            runtime TEXT NOT NULL, 
-            genre TEXT NOT NULL,
-            director TEXT NOT NULL,
-            actors TEXT NOT NULL,
-            plot TEXT NOT NULL,
-            language TEXT NOT NULL,
-            poster TEXT NOT NULL
+        CREATE TABLE IF NOT EXISTS user_movie(
+            user_id INTEGER REFERENCES user(id),
+            movie_title TEXT REFERENCES movie(title)
         )`)
+
     useDatabase.setState({ db })
 })

@@ -18,7 +18,10 @@ export const useUsers = (): Users => {
     }
     return {
         registered: async (name: string) =>
-            !!await db.getFirstAsync<Schema.user>('SELECT * FROM user WHERE username = ?', [name]),
+            !!await db.getFirstAsync<Schema.user>(/* sql */`
+            SELECT * FROM 
+            user WHERE username = ?
+            `, [name]),
         register: async (name: string, password: string) => {
             await db.runAsync(/* sql */`
             INSERT INTO user(username, password) 

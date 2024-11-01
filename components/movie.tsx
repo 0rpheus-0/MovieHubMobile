@@ -1,17 +1,15 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-import { useLoggedSession } from '@/hooks/useSession';
-import { useUser } from '@/hooks/useUser';
 import { Column, MyImage, MyText, Row } from "./constants";
 
 export namespace Movie {
-    const { username } = useLoggedSession()
-    const { removeMovie } = useUser(username)
+    // const { username } = useLoggedSession()
+    // const { removeMovie } = useUser(username)
     export const Card = (props: {
         name: string,
-        year: string,
+        years: string,
         genre: string,
-        picture: string,
+        poster: string,
         color: string,
     }) =>
 
@@ -24,12 +22,12 @@ export namespace Movie {
             alignItems: 'flex-start'
         }}>
             <Row style={{ width: '100%', height: 'auto', justifyContent: 'space-between' }}>
-                <MyImage source={props.picture} />
+                <MyImage source={props.poster} />
                 <Column>
                     <MyText style={{ fontSize: 25 }}>{props.name}</MyText>
                     <Row>
                         <MyText>{props.genre} </MyText>
-                        <MyText>{props.year}</MyText>
+                        <MyText>{props.years}</MyText>
                     </Row>
                 </Column>
             </Row>
