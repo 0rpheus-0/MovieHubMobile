@@ -65,7 +65,7 @@ export default function LoginIndex() {
                         value={password}
                         onChangeText={setPassword}
                         secureTextEntry />
-                    <MyButton onLongPress={handleLogin}>
+                    <MyButton onPress={handleLogin}>
                         <MyText>{nativeText.logIn}</MyText>
                     </MyButton>
                     <Link href='./registration' asChild>

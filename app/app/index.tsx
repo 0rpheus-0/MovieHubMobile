@@ -10,9 +10,9 @@ import { useDatabase } from '@/storages/useDatabase';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Link } from 'expo-router';
-import { deleteDatabaseAsync } from 'expo-sqlite';
+import * as ScreenOrientation from 'expo-screen-orientation';
 import React, { useState } from 'react';
-import { View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
 
 
@@ -25,75 +25,9 @@ export default function AppIndex() {
     const { username } = useLoggedSession()
     const { movies, addMovie, removeMovie } = useUser(username)
     const [addMovieName, setAddMovieName] = useState('');
-    // const [movies, setMovies] = useState([])
-    // useEffect(() => {
-    //     (async () => {
-    //         const data = await (
-    //             await fetch('https://www.omdbapi.com/?apikey=71559e25&t=iron')
-    //         ).json()
-    //         const jsonObject = JSON.parse(JSON.stringify(await data.json()))
-    //         //setMovies(data)
-    //     })()
-    // }, [])
-    // const movie = [
-    //     {
-    //         id: 1,
-    //         name: 'Iron Man',
-    //         year: '2002',
-    //         genre: 'fantactic',
-    //         picture: 'https://upload.wikimedia.org/wikipedia/ru/3/30/Iron_man_filmposter.jpg'
-    //     },
-    //     {
-    //         id: 2,
-    //         name: 'Titanic',
-    //         year: '1020',
-    //         genre: 'lovestory',
-    //         picture: 'https://upload.wikimedia.org/wikipedia/ru/1/19/Titanic_%28Official_Film_Poster%29.png'
-    //     },
-    //     {
-    //         id: 3,
-    //         name: 'Iron Man',
-    //         year: '2002',
-    //         genre: 'fantactic',
-    //         picture: 'https://upload.wikimedia.org/wikipedia/ru/3/30/Iron_man_filmposter.jpg'
-    //     },
-    //     {
-    //         id: 4,
-    //         name: 'Titanic',
-    //         year: '1020',
-    //         genre: 'lovestory',
-    //         picture: 'https://upload.wikimedia.org/wikipedia/ru/1/19/Titanic_%28Official_Film_Poster%29.png'
-    //     },
-    //     {
-    //         id: 5,
-    //         name: 'Iron Man',
-    //         year: '2002',
-    //         genre: 'fantactic',
-    //         picture: 'https://upload.wikimedia.org/wikipedia/ru/3/30/Iron_man_filmposter.jpg'
-    //     },
-    //     {
-    //         id: 6,
-    //         name: 'Titanic',
-    //         year: '1020',
-    //         genre: 'lovestory',
-    //         picture: 'https://upload.wikimedia.org/wikipedia/ru/1/19/Titanic_%28Official_Film_Poster%29.png'
-    //     },
-    //     {
-    //         id: 7,
-    //         name: 'Iron Man',
-    //         year: '2002',
-    //         genre: 'fantactic',
-    //         picture: 'https://upload.wikimedia.org/wikipedia/ru/3/30/Iron_man_filmposter.jpg'
-    //     },
-    //     {
-    //         id: 8,
-    //         name: 'Titanic',
-    //         year: '1020',
-    //         genre: 'lovestory',
-    //         picture: 'https://upload.wikimedia.org/wikipedia/ru/1/19/Titanic_%28Official_Film_Poster%29.png'
-    //     },]
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.ALL);
     return (
-        <View style={{ backgroundColor: 'black' }}>
+        <View style={{ backgroundColor: 'black', height: "100%" }}>
             <Header>
                 <Column style={{ padding: 10, width: '100%' }}>
                     <Row style={{ width: '100%' }}>
@@ -130,57 +64,47 @@ export default function AppIndex() {
                     </Row>
                 </Column>
             </Header>
-            {/* <Ionicons name='accessibility' color='orange' />
-            <MyText>{nativeText.welcom}</MyText> */}
-            <MyButton onPress={async () => console.log(await db?.getAllAsync('SELECT * FROM user'))}>
-                <MyText>Show users</MyText>
-            </MyButton>
-            <MyButton onPress={async () => console.log(await db?.getAllAsync('SELECT * FROM user_movie'))}>
-                <MyText>Show users_movie</MyText>
-            </MyButton>
-            <MyButton onPress={async () => console.log(await db?.getAllAsync('SELECT * FROM movie'))}>
-                <MyText>Show movie</MyText>
-            </MyButton>
-            <MyButton onPress={async () => {
-                await close()
-                console.log(await deleteDatabaseAsync('movie-hub-mobile'))
-            }}>
-                <MyText>Drop database</MyText>
-            </MyButton>
-            <Column>
-                <SwipeListView
-                    data={movies}
-                    renderItem={x =>
-                        <View style={{ marginBottom: 8 }}>
-                            <Movie.Card
-                                key={x.item.title}
-                                name={x.item.title}
-                                years={x.item.years}
-                                genre={x.item.genre}
-                                poster={x.item.poster}
-                                color='black'
-                            />
-                        </View>
-                    }
-                    renderHiddenItem={x =>
-                        <View style={{ marginBottom: 8 }}>
+            <SwipeListView
+                data={movies}
+                renderItem={x =>
+                    <View style={{ marginBottom: 8 }}>
+                        <Link
+                            href={{
+                                pathname: '/app/movie/[title]',
+                                params: { title: x.item.title }
+                            }}
+                            asChild >
+                            <TouchableOpacity>
+                                <Movie.Card
+                                    key={x.item.title}
+                                    name={x.item.title.length > 15 ? `${x.item.title.substring(0, 15)}...` : x.item.title}
+                                    years={x.item.years}
+                                    genre={x.item.genre}
+                                    poster={x.item.poster}
+                                    color='black'
+                                />
+                            </TouchableOpacity>
+                        </Link>
+                    </View>
+                }
+                renderHiddenItem={x =>
+                    <View style={{ marginBottom: 8 }}>
+                        <TouchableOpacity
+                            onLongPress={() => {
+                                console.log(x.item.title);
+                                removeMovie(x.item.title)
+                            }}>
                             <Movie.Back
                                 key={x.item.title}
                                 color='orange'
                                 buttonColor='red'
                             />
-                        </View>
-                    }
-                    disableRightSwipe={true}
-                    rightOpenValue={-150}
-
-                />
-
-            </Column>
-        </View >
+                        </TouchableOpacity>
+                    </View>
+                }
+                disableRightSwipe={true}
+                rightOpenValue={- 150}
+            />
+        </View>
     )
 }
-
-// function useCheckedSession(): { username: any; } {
-//     throw new Error('Function not implemented.');
-// }

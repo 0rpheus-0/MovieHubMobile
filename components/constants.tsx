@@ -108,8 +108,8 @@ export const MyTextInput = (props: TextInput['props']) => <TextInput
 export const MyImage = (props: Image['props']) => <Image
     {...props}
     style={{
-        width: 75,
-        height: 88,
+        width: 100,
+        height: 167,
         ...props.style as {},
     }}
 />

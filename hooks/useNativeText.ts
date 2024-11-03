@@ -9,7 +9,16 @@ export type AllTexts = {
     movieName: string,
     logIn: string,
     welcom: string,
-    createAccount: string
+    createAccount: string,
+    loading: string,
+    years: string,
+    runtime: string,
+    genre: string,
+    director: string,
+    actors: string,
+    plot: string,
+    languagem: string,
+
 }
 
 const english: AllTexts = {
@@ -19,7 +28,15 @@ const english: AllTexts = {
     movieName: 'Movie name',
     logIn: 'Log in',
     welcom: 'Welcome!',
-    createAccount: 'Create account'
+    createAccount: 'Create account',
+    loading: 'Loading',
+    years: 'Year',
+    runtime: 'Runtime',
+    genre: 'Genre',
+    director: 'Director',
+    actors: 'Actors',
+    plot: 'Plot',
+    languagem: 'Language',
 }
 
 const russian: AllTexts = {
@@ -29,7 +46,15 @@ const russian: AllTexts = {
     movieName: 'Название фильма',
     logIn: 'Войти',
     welcom: 'Вельком!',
-    createAccount: 'Создать аккаунт'
+    createAccount: 'Создать аккаунт',
+    loading: 'Загрузка',
+    years: 'Год',
+    runtime: 'Длительность',
+    genre: 'Жанр',
+    director: 'Режиссер',
+    actors: 'Актеры',
+    plot: 'Сюжет',
+    languagem: 'Языки',
 }
 
 export default function useNativeText() {

@@ -54,16 +54,7 @@ export class SqliteChachedMovies implements Movies {
         const movie = await this.origin.withTitle(title)
         if (!movie) return undefined
         console.log('db2', movie.title)
-        // console.log(movie)
-        // console.log([movie.title,
-        // movie.years,
-        // movie.runtime,
-        // movie.genre,
-        // movie.director,
-        // movie.actors,
-        // movie.plot,
-        // movie.language,
-        // movie.poster])
+
         await this.sqlite.runAsync(/* sql */`
             INSERT INTO movie(title, years, runtime, genre, director, actors, plot, language, poster) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)

@@ -49,7 +49,7 @@ openDatabaseAsync('movie-hub-mobile').then(async db => {
     await db.runAsync(/* sql */`
             CREATE TABLE IF NOT EXISTS movie(
                 id TEXT PRIMARY KEY,
-                title TEXT NOT NULL UNIQUE,
+                title TEXT NOT NULL,
                 years TEXT NOT NULL,
                 runtime TEXT NOT NULL, 
                 genre TEXT NOT NULL,
