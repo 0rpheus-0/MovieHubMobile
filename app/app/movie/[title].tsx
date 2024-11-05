@@ -3,7 +3,7 @@ import Logo from "@/components/Logo";
 import { useMovie } from "@/hooks/useMovie";
 import useNativeText from "@/hooks/useNativeText";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { useLocalSearchParams } from "expo-router";
+import { Link, useLocalSearchParams } from "expo-router";
 import { Text, View } from "react-native";
 
 export default function Movie() {
@@ -15,7 +15,9 @@ export default function Movie() {
     return (
         <View style={{ backgroundColor: 'black', height: '100%', padding: 10 }}>
             <Row style={{ width: '100%' }}>
-                <Logo />
+                <Link href='/app'>
+                    <Logo />
+                </Link>
                 <MaterialIcons
                     name="language"
                     color='orange'

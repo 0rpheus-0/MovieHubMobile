@@ -8,8 +8,8 @@ export default function Layout() {
   return (
     <Stack screenOptions={{
       statusBarHidden: true,
-      statusBarColor: 'orange',
-      statusBarStyle: 'dark',
+      // statusBarColor: 'orange',
+      // statusBarStyle: 'dark',
       animation: undefined,
       headerShown: false
     }} />

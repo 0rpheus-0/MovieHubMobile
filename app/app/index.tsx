@@ -66,6 +66,7 @@ export default function AppIndex() {
             </Header>
             <SwipeListView
                 data={movies}
+                style={{ padding: 10 }}
                 renderItem={x =>
                     <View style={{ marginBottom: 8 }}>
                         <Link
