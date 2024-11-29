@@ -40,6 +40,7 @@
     "react-native-screens": "3.31.1",
     "react-native-swipe-list-view": "^3.2.9",
     "react-native-web": "~0.19.10",
+    "rtn-calculator": "../RTNMovieHubMobile/",
     "zustand": "^5.0.0"
   },
   "devDependencies": {
